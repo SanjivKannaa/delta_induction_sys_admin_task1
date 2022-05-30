@@ -7,8 +7,7 @@ function click(number) {
 }
 
 function start(){
-    document.getElementById("button1").mousedown();
-    document.getElementById("button4").click();
+    window.open("level1_1.html", "_self");
 }
 
 
