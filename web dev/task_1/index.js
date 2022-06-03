@@ -10,14 +10,15 @@ function sleep(milliseconds) {
 
 
 function developer_information(){
-    window.open("developer_information.html", "_self");
+  window.open("developer_information.html", "_self");
 }
 
+function leaderboard(){
+  window.open("leaderboard.html", "_self");
+}
 
 document.body.requestFullscreen();
 function startgame(){
     sleep(2000);
-    window.open("level1.html", "_self", "fullscreen=yes");
+    window.open("single.html", "_self", "fullscreen=yes");
 }
-highscore_value = 0;
-document.body.innerHTML = "<p3 class='highscore' style='text-align: right'>Highscore => " + highscore_value + "</p3>";

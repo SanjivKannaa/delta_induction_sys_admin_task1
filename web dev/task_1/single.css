@@ -1,0 +1,177 @@
+body{
+    background-color: rgb(53, 53, 53);
+    color: rgb(100, 100, 100);
+    text-align: center;
+}
+
+
+.main{
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.main button{
+    height: 100px;
+    width: 100px;
+    border-radius: 5px;
+    margin: 10px;
+
+}
+
+.clicked{
+    background-color: #B4FF9F;
+    border-radius: 0;
+}
+
+.wrong{
+    background-color: red;
+}
+.g6{
+    background-color: #FF6B6B;
+    transition: 0.3s;
+    height: 5rem;
+    width: 10rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+    border-radius: 2rem;
+    margin-left: 1rem;
+    color: #371B58;
+}
+
+.g6:hover{
+    background-color: #FF8080;
+    transition: 0.2s;
+    -webkit-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.le{
+    background-color: rgb(53, 53, 53);
+    transition: 0.3s;
+    height: 5rem;
+    width: 10rem;
+    font-size: large;
+    border-radius: 2rem;
+    margin-left: 1rem;
+    color: whitesmoke;
+    margin-top: 1rem;
+
+}
+
+.le:hover{
+    background-color: rgb(100, 100, 100);
+    transition: 0.2s;
+    -webkit-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.ho{
+    background-color: rgb(53, 53, 53);
+    transition: 0.3s;
+    height: 50px;
+    width: 100px;
+    font-size: large;
+    border-radius: 10px;
+    margin-left: 1rem;
+    color: white;
+    margin-top: 1rem;
+    position: absolute;
+    right: 1rem;
+    top: 0.7rem;
+    border-color: black;
+
+}
+
+.ho:hover{
+    background-color: rgb(100, 100, 100);
+    transition: 0.2s;
+    -webkit-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
+input{
+    border: none;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    transition: 0.3s;
+    text-align: center;
+}
+
+input:focus{
+    border: none;
+    outline: none;
+    border-radius: 0rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    
+}
+
+.namebut{
+    background-color: rgb(53, 53, 53);
+    transition: 0.3s;
+    height: 2.5rem;
+    width: 5rem;
+    font-size: large;
+    border-radius: 10px;
+    margin-left: 1rem;
+    color: white;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: black;
+}
+
+.namebut:hover{
+    background-color: rgb(100, 100, 100);
+    transition: 0.2s;
+    -webkit-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.startbut{
+    background-color: #371B58;
+    transition: 0.3s;
+    height: 2.5rem;
+    width: 5rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+    border-radius: 10px;
+    margin-left: 1rem;
+    color: white;
+    margin-top: 1rem;
+    
+    border-color: white;
+}
+
+.startbut:hover{
+    background-color: #4C3575;
+}
+@media only screen and (max-width: 700px) {
+    .ho{
+        display: block;
+    }
+    h1{
+        padding-top: 4rem;
+    }
+    .main button{
+        width :3rem;
+        height: 3rem;
+    }
+    .g6{
+        width: 10rem;
+        height: 4rem;
+    }
+    .le{
+        width: 10rem;
+        height: 4rem;
+    }
+    body{
+        font-size: small;
+    }
+    
+}
