@@ -44,9 +44,6 @@ li:hover {
     color: rgb(255, 255, 255);
 }
 
-
-
-
 .ho{
     background-color: rgb(53, 53, 53);
     transition: 0.3s;
@@ -58,7 +55,7 @@ li:hover {
     color: white;
     margin-top: 1rem;
     position: absolute;
-    right: 1rem;
+    right: 2.25rem;
     top: 0.7rem;
 }
 

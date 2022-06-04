@@ -10,9 +10,6 @@ var name = "Player";
 var score = -100;
 
 
-for(var i=1;i<17;i++){
-    document.querySelector('.b'+ String(i)).disabled = true;
-}
 
 
 function home(){
@@ -26,6 +23,11 @@ function leaderboard(){
 function gamestart(){
     gamepattern();
     levelob.innerHTML = "Level : 1";
+}
+
+
+for(var i=1;i<17;i++){
+    document.querySelector('.b'+ String(i)).disabled = true;
 }
 
 document.querySelector('.namebut').addEventListener('click',function(){
@@ -166,10 +168,9 @@ function clickbut(key){
             document.querySelector('.b' + but).classList.add('clicked');
         }
         console.log('wrong');
-        infoob.innerHTML = 'Wrong! press any key to restart, scored ' + String(score) + ' points' ;
+        infoob.innerHTML = 'Wrong! scored ' + String(score) + ' points' ;
         gamepat = [];
         userpat = [];
-        wro.play();
         start = false;
         buttons = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'];
         var keys = Object.keys(localStorage);

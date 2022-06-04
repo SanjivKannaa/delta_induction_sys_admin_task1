@@ -27,6 +27,8 @@ document.getElementById('list').appendChild(li);
 
 console.log(scores);
 
+
+
 function home(){
-    window.open("index.html", "_self")
+    window.open("index.html", "_self");
 }
