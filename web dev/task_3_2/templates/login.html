@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Login | Slambook</title>
+</head>
+<body>
+    <form onsubmit="login_submition()" method = "POST">
+        <h3>Login </h3>
+        
+        <label>rollno  </label>
+        <input type = 'text' name = 'rollno' id='rollno'/></p>
+        
+        <label>password  </label>
+        <input type = 'password' name = 'password' id='password'/>
+        <br><br><br>
+        <input type = 'submit' value = 'Login'/>
+     </form>
+     <script type="text/javascript">
+        function login_submition(){
+            rollno = document.getElementById('rollno');
+            password = document.getElementById('password');
+            window.location.href = 'google.com';
+        }
+     </script>
+</body>
+</html>
