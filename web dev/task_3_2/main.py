@@ -1,12 +1,38 @@
+from hashlib import new
 from sqlite3 import connect
+import pickle
+from urllib import response
 from wsgiref.simple_server import make_server
-from flask import Flask, jsonify, make_response, render_template, request, request_started
+from flask import Flask, jsonify, make_response, render_template, render_template_string, request, request_started
 import database
+import email_bot
+import random
 
 app = Flask(__name__)
 
 
+@app.route('/admin')
+def admin():
+    return '''
+    <html>
+    <head>
+    <title>admin page | Slambook</title>
+    </head>
+    <body>
+    <a href="./admin/passwords">passwords database</a>
+    <br><br>
+    <a href="./admin/users">user database</a>
+    </body>
+    </html>
+    '''
 
+@app.route('/admin/passwords')
+def admin_pass():
+    return make_response(jsonify(database.get_login_info()), 200)
+
+@app.route('/admin/users')
+def admin_users():
+    return make_response(jsonify(database.get_all_user_info()), 200)
 
 @app.route('/')
 def function():
@@ -51,6 +77,27 @@ def login_validation():
             return make_response(render_template("login.html"))
 
 
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    if request.method == "GET":
+        return render_template('signup.html')
+    if request.method == "POST":
+        name = str(request.form.get('name'))
+        rollno = str(request.form.get('rollno'))
+        password1 = str(request.form.get('password1'))
+        password2 = str(request.form.get('password2'))
+        gender = str(request.form.get('gender'))
+        programme = str(request.form.get('programme'))
+        branch = str(request.form.get('branch'))
+        section = str(request.form.get('section'))
+        username = str(request.form.get('username'))
+        hostel = str(request.form.get('hostel'))
+        if database.check_signup(name, rollno, password1, password2, gender, programme, branch, section, username, hostel)[0]:
+            return render_template('signup_success.html')
+        else:
+            return database.check_signup(name, rollno, password1, password2, gender, programme, branch, section, username, hostel)[1]
+
+
 @app.route('/logout', methods=["POST", "GET"])
 def logout():
     if request.method == 'GET':
@@ -63,10 +110,33 @@ def logout():
 @app.route('/forgot_password', methods=["GET", "POST"])
 def forgot_password():
     if request.method == "GET":
-        pass
-    else:
-        pass
+        return render_template("forgot_password.html")
+    if request.method == "POST":
+        rollno = request.form.get('rollno')
+        f = open('./data/otp.bin', "wb")
+        otp = str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))+str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))+str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))+str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+        print(otp)
+        pickle.dump([rollno, otp], f)
+        f.close()
+        email_bot.send_otp(str(rollno)+"@nitt.edu", otp)
+        return render_template("forgot_password_step_2.html")
 
+@app.route('/forgot_password/otp_accepted', methods=["GET", "POST"])
+def change_password():
+    if request.method == "GET":
+        return render_template('forgot_password_Step_2.html')
+    if request.method == "POST":
+        f = open("./data/otp.bin", 'rb')
+        rollno, given_otp = list(pickle.load(f))
+        f.close()
+        otp = request.form.get('otp')
+        newpassword1 = request.form.get('newpassword1')
+        newpassword2 = request.form.get('newpassword2')
+        if otp == given_otp and newpassword1 == newpassword2:
+            database.put_login_info(rollno, newpassword1)
+            return render_template('password_changed.html')
+        else:
+            return "error"
 
 @app.route('/feed', methods=["GET"])
 def feed():
