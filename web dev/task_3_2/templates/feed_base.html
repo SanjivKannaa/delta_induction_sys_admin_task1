@@ -14,7 +14,7 @@
             width: auto;
             margin-top: 10px;
             margin-left: 800px;
-            margin-right: 700px;
+            margin-right: auto;
         }
         .new_post_holder{
             align-self: center;
@@ -56,9 +56,10 @@
             padding: 16px;
             font-size: 34px;
             border: none;
-            height: 50px;
-            width: 50px;
-            border-radius: 50%;
+            height: 75px;
+            width: 300px;
+            border-radius: 0%;
+            font-size: 16px;
         }
         .dropdown {
             position: relative;
@@ -69,7 +70,7 @@
             position: absolute;
             background-color: rgb(90, 90, 90);
             min-width: 120px;
-            margin-left: -25px;
+            margin-left: 80px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             border: 5px;
@@ -89,9 +90,21 @@
         }
         .dropdown:hover .dropbtn {
             height: 60px;
-            width: 60px;
+            width: 310px;
             margin-top: -5px;
             margin-left: -5px;
+        }
+        .post_box{
+            display: flex;
+            justify-content: center;
+            background-color: red;
+            height: 200px auto;
+            width: 1000px auto;
+            text-align: justify;
+            margin-top: 100px;
+            margin-left: 480px;
+            margin-right: 480px;
+            align-content: center;
         }
     </style>
 </head>
@@ -148,8 +161,12 @@
         2 28 -1 47 -10 52 -16 11 -23 11 -31 2z"/>
         </g>
         </svg>
+        <form method="POST" class="search_holder">
+            <input name="search_bar" class="search_bar" placeholder="search..."/>
+            <input class="search_button" type = 'submit' value = 'SEARCH'/>
+        </form>
         <div class="dropdown">
-            <button class="dropbtn">.</button>
+            <button class="dropbtn">logged in as {{username}}</button>
             <div class="dropdown-content">
               <a href="./my_profile">My Profile</a>
               <a href="./settings">Settings</a>
@@ -158,10 +175,10 @@
           </div>
     </header>
     <form method="POST" class="new_post_holder">
-        <input class="new_post_bar" placeholder="type new post... use @ to mention someone"/>
+        <input name="post_bar" class="new_post_bar" placeholder="type new post... use @ to mention someone"/>
         <input class="post_button" type = 'submit' value = 'POST'/>
     </form>
-    {% block main %}
-    {% endblock %}
+    {%block main%}
+    {%endblock%}
 </body>
 </html>

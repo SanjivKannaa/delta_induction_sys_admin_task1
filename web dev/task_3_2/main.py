@@ -3,13 +3,27 @@ from sqlite3 import connect
 import pickle
 from urllib import response
 from wsgiref.simple_server import make_server
-from flask import Flask, jsonify, make_response, render_template, render_template_string, request, request_started
+from flask import Flask, jsonify, make_response, redirect, render_template, render_template_string, request, request_started
 import database
 import email_bot
 import random
 
 app = Flask(__name__)
 
+
+@app.route('/bruh')
+def bruh():
+    return render_template('feed.html', username="sanjiv")
+
+
+@app.errorhandler(404)
+def error_404(e):
+    return render_template('error404.html', error = "404")
+
+
+@app.errorhandler(500)
+def error_500(e):
+    return render_template('error404.html', error = "500")
 
 @app.route('/admin')
 def admin():
@@ -34,14 +48,31 @@ def admin_pass():
 def admin_users():
     return make_response(jsonify(database.get_all_user_info()), 200)
 
-@app.route('/')
+@app.route('/', methods = ["GET", "POST"])
 def function():
-    if  request.cookies.get('loginstatus') == 'True':
-        return 'feed for user : '+request.cookies.get('login_username')
-        #return render_template('feed.html')
-        # feed()
-    else:
-        return render_template('login.html')
+    if request.method == "GET":
+        if request.cookies.get('login_status') == 'True':
+            username = request.cookies.get('login_username')
+            f = open("./data/posts.bin", "rb")
+            posts = pickle.load(f)
+            f.close()
+            for bruh in range(12-len(posts)):
+                posts.append(["", "", [""], ""])
+            posts = [i[1] for i in posts]
+            #print(posts)
+            return render_template('feed.html', username = username, posts0 = posts[0], posts1 = posts[1], posts2 = posts[2], posts3 = posts[3], posts4 = posts[4], posts5 = posts[5], posts6 = posts[6], posts7 = posts[7], posts8 = posts[8], posts9 = posts[9], posts10 = posts[10])
+        else:
+            return render_template('login.html')
+    if request.method == "POST":
+        search_content = str(request.form.get("search_bar"))
+        new_post_content = str(request.form.get("new_post_bar"))
+        print(search_content)
+        print(new_post_content)
+        if search_content != "":
+            return redirect("/search")
+        if new_post_content != "":
+            pass
+        return redirect("/")
 
 @app.route('/about')
 def about():
@@ -101,7 +132,7 @@ def signup():
 @app.route('/logout', methods=["POST", "GET"])
 def logout():
     if request.method == 'GET':
-        res = make_response(render_template('login.html'))
+        res = make_response(redirect('./login'))
         res.set_cookie('loginstatus', "false")
         res.set_cookie('login_rollno', '')
         res.set_cookie('login_username', '')
@@ -138,13 +169,16 @@ def change_password():
         else:
             return "error"
 
-@app.route('/feed', methods=["GET"])
-def feed():
-    if  request.cookies.get('loginstatus') == 'True':
-        return render_template('feed.html')
-    else:
-        return render_template('login.html')
 
+
+@app.route('/my_profile', methods=["POST", "GET"])
+def my_profile():
+    return render_template('my_profile.html')
+
+
+@app.route('/settings', methods=["POST", "GET"])
+def settings():
+    return render_template('settings.html')
 
 
 '''
