@@ -56,9 +56,11 @@ def function():
             f = open("./data/posts.bin", "rb")
             posts = pickle.load(f)
             f.close()
-            for bruh in range(12-len(posts)):
-                posts.append(["", "", [""], ""])
-            posts = [i[1] for i in posts]
+            for bruh in range(12):
+                bruhh = str(bruh)
+                if bruhh not in posts.keys():
+                    posts[bruhh] = ["", "", [""], ""]
+            posts = [i[1] for i in posts.values()]
             #print(posts)
             return render_template('feed.html', username = username, posts0 = posts[0], posts1 = posts[1], posts2 = posts[2], posts3 = posts[3], posts4 = posts[4], posts5 = posts[5], posts6 = posts[6], posts7 = posts[7], posts8 = posts[8], posts9 = posts[9], posts10 = posts[10])
         else:
