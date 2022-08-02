@@ -53,6 +53,7 @@ def function():
     if request.method == "GET":
         if request.cookies.get('login_status') == 'True':
             username = request.cookies.get('login_username')
+            rollno = request.cookies.get('login_rollno')
             f = open("./data/posts.bin", "rb")
             posts = pickle.load(f)
             f.close()
