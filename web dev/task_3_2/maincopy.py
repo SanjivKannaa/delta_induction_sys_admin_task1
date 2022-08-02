@@ -3,7 +3,7 @@ from sqlite3 import connect
 import pickle
 from urllib import response
 from wsgiref.simple_server import make_server
-from flask import Flask, flash, jsonify, make_response, redirect, render_template, render_template_string, request, request_started
+from flask import Flask, jsonify, make_response, redirect, render_template, render_template_string, request, request_started
 import database
 import email_bot
 import random
@@ -36,8 +36,6 @@ def admin():
     <a href="./admin/passwords">passwords database</a>
     <br><br>
     <a href="./admin/users">user database</a>
-    <br><br>
-    <a href="./admin/posts">all posts</a>
     </body>
     </html>
     '''
@@ -50,12 +48,6 @@ def admin_pass():
 def admin_users():
     return make_response(jsonify(database.get_all_user_info()), 200)
 
-@app.route('/admin/posts')
-def admin_posts():
-    return make_response(jsonify(database.get_all_posts()), 200)
-
-
-
 @app.route('/', methods = ["GET", "POST"])
 def function():
     if request.method == "GET":
@@ -63,24 +55,21 @@ def function():
             username = request.cookies.get('login_username')
             rollno = request.cookies.get('login_rollno')
             f = open("./data/posts.bin", "rb")
-            all_posts = list(pickle.load(f))    #[["by", "message", ["tags"...], "timestamp"]...]
+            all_posts = pickle.load(f)
             f.close()
-            f = open("./data/user_data/{}.bin".format(rollno), "rb")
+            f = open("./data/user_data/{rollno}.bin", "rb")
             following, followers = list(pickle.load(f))
             f.close()
             posts = []
-            for i in all_posts:
+            for i in all_posts.values():
                 for j in following:
-                    if i[1] not in [bruh[0] for bruh in posts] and (i[0] == username or j in i[1] or rollno in i[1]):
-                        #posts.append([i[1], i[0]])
-                        posts.append([database.change_rollno_to_username(i[1]), database.change_rollno_to_username(i[0])])
-            posts
-            for bruh in range(12-len(posts)):
-                posts.append(["", ""])
-            print()
-            print(posts)
-            return render_template('feed.html', username = username, posts0 = posts[0][0], posts1 = posts[1][0], posts2 = posts[2][0], posts3 = posts[3][0], posts4 = posts[4][0], posts5 = posts[5][0], posts6 = posts[6][0], posts7 = posts[7][0], posts8 = posts[8][0], posts9 = posts[9][0], posts10 = posts[10][0], postby0 = posts[0][1], postby1 = posts[1][1], postby2 = posts[2][1], postby3 = posts[3][1], postby4 = posts[4][1], postby5 = posts[5][1], postby6 = posts[6][1], postby7 = posts[7][1], postby8 = posts[8][1], postby9 = posts[9][1], postby10 = posts[10][1])
-            # return render_template('feed.html', username = username, posts0 = "sanjiv", postby0 = "sanjiv", posts1 = "", postby1 = "")
+                    if i[0] == username or j in i[1]:
+                        posts.append([i[1], i[0]])
+            for bruh in range(12):
+                bruhh = str(bruh)
+                if bruhh not in posts.keys():
+                    posts[bruhh] = ["", "", [""], ""]
+            return render_template('feed.html', username = username, posts0 = posts[0][0], posts1 = posts[1][0], posts2 = posts[2][0], posts3 = posts[3][0], posts4 = posts[4][0], posts5 = posts[5][0], posts6 = posts[6][0], posts7 = posts[7][0], posts8 = posts[8][0], posts9 = posts[9][0], posts10 = posts[10][0], postby0 = posts[0][1], postby1 = posts[1][0], postby2 = posts[2][1], postby3 = posts[3][1], postby4 = posts[4][1], postby5 = posts[5][1], postby6 = posts[6][1], postby7 = posts[7][1], postby8 = posts[8][1], postby9 = posts[9][1], postby10 = posts[10][1])
         else:
             return render_template('login.html')
     if request.method == "POST":
@@ -117,8 +106,6 @@ def login_validation():
         password = str(request.form.get('password'))
         #print('\n\n\n\n{}\n\n{}\n\n\n\n'.format(len(rollno), len(password)))
         #return "username = {} password = {}".format(rollno, password)
-        if rollno not in content.keys():
-            return make_response(render_template("login.html"))
         if content[rollno] == password:
             res = make_response(render_template('login_success.html'))
             username = database.get_user_info(rollno)['username']

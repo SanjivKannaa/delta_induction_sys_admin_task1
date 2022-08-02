@@ -1,7 +1,10 @@
+from gettext import find
 from webbrowser import get
 from cryptography.fernet import Fernet
 import pickle
 import csv
+
+from flask import message_flashed
 
 
 def init():
@@ -125,3 +128,24 @@ def check_signup(name, rollno, password1, password2, gender, programme, branch, 
     except:
         return [False, "error uploading"]
 
+def get_all_posts():
+    f = open("./data/posts.bin", "rb")
+    l = pickle.load(f)
+    f.close()
+    return l
+
+
+def change_rollno_to_username(message):
+    f = open("./data/user_info.bin", "rb")
+    user_info = dict(pickle.load(f))
+    f.close()
+    message = list(message.split())
+    for i in range(len(message)):
+        if message[i][0] == "@":
+            rollno = message[i][1:]
+            username = user_info[rollno]["username"]
+            message[i] = "@" + username
+    return_string = ''
+    for i in message:
+        return_string += i + " "
+    return return_string
