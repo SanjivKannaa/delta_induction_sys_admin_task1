@@ -107,7 +107,7 @@
             height: 100px;
             width: 1000px;
         }
-        .post_button{
+        .new_post_button{
             margin-top: 50px;
             margin-left: 1250px;
             height: 40px;
@@ -115,7 +115,7 @@
             border-radius: 10%;
             font-size: 12px;
         }
-        .post_button:hover{
+        .new_post_button:hover{
             margin-top: 40px;
             margin-left: 1240px;
             height: 60px;
@@ -205,8 +205,8 @@
         </div>
     </header>
     <form method="POST" class="new_post_holder">
-        <input name="post_bar" class="new_post_bar" placeholder="type new post... use @ to mention someone"/>
-        <input class="post_button" type = 'submit' value = 'POST'/>
+        <input name="new_post_bar" class="new_post_bar" placeholder="type new post... use @ to mention someone"/>
+        <input name="new_post_button" class="new_post_button" type = 'submit' value = 'POST'/>
     </form>
     {%block main%}
     {%endblock%}

@@ -1,4 +1,5 @@
 from hashlib import new
+import re
 from sqlite3 import connect
 import pickle
 from urllib import response
@@ -38,6 +39,8 @@ def admin():
     <a href="./admin/users">user database</a>
     <br><br>
     <a href="./admin/posts">all posts</a>
+    <br><br>
+    <a href="./admin/follow">all profile following and followers list</a>
     </body>
     </html>
     '''
@@ -54,6 +57,10 @@ def admin_users():
 def admin_posts():
     return make_response(jsonify(database.get_all_posts()), 200)
 
+@app.route('/admin/follow')
+def admin_follow():
+    return make_response(jsonify(database.get_follow()), 200)
+
 
 
 @app.route('/', methods = ["GET", "POST"])
@@ -69,29 +76,31 @@ def function():
             following, followers = list(pickle.load(f))
             f.close()
             posts = []
-            for i in all_posts:
-                for j in following:
-                    if i[1] not in [bruh[0] for bruh in posts] and (i[0] == username or j in i[1] or rollno in i[1]):
-                        #posts.append([i[1], i[0]])
-                        posts.append([database.change_rollno_to_username(i[1]), database.change_rollno_to_username(i[0])])
-            posts
+            if len(following) == 0:
+                posts = [[["search and follow your friends to see their posts"], ["slambook"]]]
+            else:
+                for i in all_posts:
+                    for j in following:
+                        if i[1] not in [bruh[0] for bruh in posts] and (i[0] == username or j in i[1] or rollno in i[1]):
+                            #posts.append([i[1], i[0]])
+                            posts.append([database.change_rollno_to_username(i[1]), database.change_rollno_to_username(i[0])])
             for bruh in range(12-len(posts)):
                 posts.append(["", ""])
-            print()
-            print(posts)
             return render_template('feed.html', username = username, posts0 = posts[0][0], posts1 = posts[1][0], posts2 = posts[2][0], posts3 = posts[3][0], posts4 = posts[4][0], posts5 = posts[5][0], posts6 = posts[6][0], posts7 = posts[7][0], posts8 = posts[8][0], posts9 = posts[9][0], posts10 = posts[10][0], postby0 = posts[0][1], postby1 = posts[1][1], postby2 = posts[2][1], postby3 = posts[3][1], postby4 = posts[4][1], postby5 = posts[5][1], postby6 = posts[6][1], postby7 = posts[7][1], postby8 = posts[8][1], postby9 = posts[9][1], postby10 = posts[10][1])
             # return render_template('feed.html', username = username, posts0 = "sanjiv", postby0 = "sanjiv", posts1 = "", postby1 = "")
         else:
-            return render_template('login.html')
+            return redirect('./login')
     if request.method == "POST":
         search_content = str(request.form.get("search_bar"))
         new_post_content = str(request.form.get("new_post_bar"))
         print(search_content)
         print(new_post_content)
-        if search_content != "":
+        if search_content != "None":
             return redirect("/search")
-        if new_post_content != "":
-            pass
+        if new_post_content != "None":
+            print("making a new post")
+            database.push_new_post(new_post_content, str(request.cookies.get('login_username')))
+            return redirect("/")
         return redirect("/")
 
 @app.route('/about')
@@ -118,16 +127,16 @@ def login_validation():
         #print('\n\n\n\n{}\n\n{}\n\n\n\n'.format(len(rollno), len(password)))
         #return "username = {} password = {}".format(rollno, password)
         if rollno not in content.keys():
-            return make_response(render_template("login.html"))
+            return make_response(redirect("/login"))
         if content[rollno] == password:
             res = make_response(render_template('login_success.html'))
             username = database.get_user_info(rollno)['username']
-            res.set_cookie('loginstatus', 'True')
+            res.set_cookie('login_status', 'True')
             res.set_cookie('login_rollno', rollno)
             res.set_cookie('login_username', username)
             return res
         else:
-            return make_response(render_template("login.html"))
+            return redirect("./login")
 
 
 @app.route('/signup', methods=["GET", "POST"])
@@ -145,8 +154,8 @@ def signup():
         section = str(request.form.get('section'))
         username = str(request.form.get('username'))
         hostel = str(request.form.get('hostel'))
-        f = open("./data/user_data/{rollno}.bin", "wb")
-        content = [["slambook"], []]  #[[following], [followers]]
+        f = open("./data/user_data/{}.bin".format(rollno), "wb")
+        content = [[], []]  #[[following], [followers]]
         pickle.dump(content, f)
         f.close()
         if database.check_signup(name, rollno, password1, password2, gender, programme, branch, section, username, hostel)[0]:
@@ -159,7 +168,7 @@ def signup():
 def logout():
     if request.method == 'GET':
         res = make_response(redirect('./login'))
-        res.set_cookie('loginstatus', "false")
+        res.set_cookie('login_status', "false")
         res.set_cookie('login_rollno', '')
         res.set_cookie('login_username', '')
         return res
@@ -207,16 +216,9 @@ def settings():
     return render_template('settings.html')
 
 
-'''
-@app.route('/login_bypass', methods = ['POST', 'GET'])
-def login_bypass():
-    if True: #request.method == 'POST':
-        user = 'True'   # request.form['login_status']
-        resp = make_response(render_template('login_success.html'))
-        resp.set_cookie('login_status', user)
-        return resp
-    return "cookie not found"
-'''
+
+
+
 
 
 

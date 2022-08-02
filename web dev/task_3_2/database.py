@@ -3,8 +3,9 @@ from webbrowser import get
 from cryptography.fernet import Fernet
 import pickle
 import csv
-
+import os
 from flask import message_flashed
+import datetime
 
 
 def init():
@@ -149,3 +150,38 @@ def change_rollno_to_username(message):
     for i in message:
         return_string += i + " "
     return return_string
+
+def get_follow():
+    content = dict()
+    for i in get_login_info().keys():
+        f = open("./data/user_data/{}.bin".format(i), "rb")
+        content[i] = list(pickle.load(f))
+        f.close()
+    return content
+
+
+def change_username_to_rollno(username):
+    f = open("./data/user_info.bin", "rb")
+    user_info = dict(pickle.load(f))
+    f.close()
+    for i in user_info.keys():
+        if user_info[i]["username"] == username:
+            return i
+
+def push_new_post(message, username):
+    message = message.split()
+    m = ""
+    tag = []
+    for i in message:
+        if i[0] == "@":
+            tag.append(i[1:])
+            m += "@" + change_username_to_rollno(i[1:]) + " "
+        else:
+            m += i + " "
+    f = open("./data/posts.bin", "rb")
+    content = list(pickle.load(f))
+    f.close()
+    content.append(["@" + change_username_to_rollno(username), m, tag, str(datetime.datetime.now())[:-7]])
+    f = open("./data/posts.bin", "wb")
+    pickle.dump(content, f)
+    f.close()
