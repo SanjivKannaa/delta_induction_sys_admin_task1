@@ -1,10 +1,13 @@
+from encodings import search_function
 from hashlib import new
+from operator import methodcaller
 import re
 from sqlite3 import connect
 import pickle
 from urllib import response
 from wsgiref.simple_server import make_server
 from flask import Flask, flash, jsonify, make_response, redirect, render_template, render_template_string, request, request_started
+from jmespath import search
 import database
 import email_bot
 import random
@@ -96,12 +99,26 @@ def function():
         print(search_content)
         print(new_post_content)
         if search_content != "None":
-            return redirect("/search")
+            f = open("./data/search.bin", "wb")
+            pickle.dump(search_content, f)
+            f.close()
+            return redirect('/search_result')
         if new_post_content != "None":
             print("making a new post")
             database.push_new_post(new_post_content, str(request.cookies.get('login_username')))
             return redirect("/")
         return redirect("/")
+
+@app.route("/search_result", methods = ["GET", "POST"])
+def search_result():
+    if request.method == "GET":
+        f = open("./data/search.bin", "rb")
+        search_content = pickle.load(f)
+        f.close()
+        
+
+
+
 
 @app.route('/about')
 def about():
