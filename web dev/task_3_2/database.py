@@ -34,7 +34,7 @@ def init():
             "branch" : "ICE",
             "section" : "A",
             "username" : "madhuxmitha",
-            "hostel" : "opal C"
+            "hostel" : "opal D"
         }
     }
     pickle.dump(content, f)
@@ -100,7 +100,8 @@ def put_user_info(name, rollno, gender, programme, branch, section, username, ho
         "branch" : branch,
         "section" : section,
         "username" : username,
-        "hostel" : hostel
+        "hostel" : hostel,
+        "rollno" : rollno
     }
     f = open("./data/user_info.bin", "wb")
     pickle.dump(content, f)
