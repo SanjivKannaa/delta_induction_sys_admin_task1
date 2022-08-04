@@ -86,10 +86,10 @@ def function():
                     for j in following:
                         if i[1] not in [bruh[0] for bruh in posts] and (i[0] == username or j in i[1] or rollno in i[1]):
                             #posts.append([i[1], i[0]])
-                            posts.append([database.change_rollno_to_username(i[1]), database.change_rollno_to_username(i[0])])
-            for bruh in range(12-len(posts)):
-                posts.append(["", ""])
-            return render_template('feed.html', username = username, posts0 = posts[0][0], posts1 = posts[1][0], posts2 = posts[2][0], posts3 = posts[3][0], posts4 = posts[4][0], posts5 = posts[5][0], posts6 = posts[6][0], posts7 = posts[7][0], posts8 = posts[8][0], posts9 = posts[9][0], posts10 = posts[10][0], postby0 = posts[0][1], postby1 = posts[1][1], postby2 = posts[2][1], postby3 = posts[3][1], postby4 = posts[4][1], postby5 = posts[5][1], postby6 = posts[6][1], postby7 = posts[7][1], postby8 = posts[8][1], postby9 = posts[9][1], postby10 = posts[10][1])
+                            posts.append([database.change_rollno_to_username(i[1]), database.change_rollno_to_username(i[0]), all_posts.index(i)])
+            for bruh in range(31-len(posts)):
+                posts.append(["", "", ""])
+            return render_template('feed.html', username = username, post0 = posts[0][0], postby0 = posts[0][1], postID0 = posts[0][2], post1 = posts[1][0], postby1 = posts[1][1], postID1 = posts[1][2], post2 = posts[2][0], postby2 = posts[2][1], postID2 = posts[2][2], post3 = posts[3][0], postby3 = posts[3][1], postID3 = posts[3][2], post4 = posts[4][0], postby4 = posts[4][1], postID4 = posts[4][2], post5 = posts[5][0], postby5 = posts[5][1], postID5 = posts[5][2], post6 = posts[6][0], postby6 = posts[6][1], postID6 = posts[6][2], post7 = posts[7][0], postby7 = posts[7][1], postID7 = posts[7][2], post8 = posts[8][0], postby8 = posts[8][1], postID8 = posts[8][2], post9 = posts[9][0], postby9 = posts[9][1], postID9 = posts[9][2], post10 = posts[10][0], postby10 = posts[10][1], postID10 = posts[10][2], post11 = posts[11][0], postby11 = posts[11][1], postID11 = posts[11][2], post12 = posts[12][0], postby12 = posts[12][1], postID12 = posts[12][2], post13 = posts[13][0], postby13 = posts[13][1], postID13 = posts[13][2], post14 = posts[14][0], postby14 = posts[14][1], postID14 = posts[14][2], post15 = posts[15][0], postby15 = posts[15][1], postID15 = posts[15][2], post16 = posts[16][0], postby16 = posts[16][1], postID16 = posts[16][2], post17 = posts[17][0], postby17 = posts[17][1], postID17 = posts[17][2], post18 = posts[18][0], postby18 = posts[18][1], postID18 = posts[18][2], post19 = posts[19][0], postby19 = posts[19][1], postID19 = posts[19][2], post20 = posts[20][0], postby20 = posts[20][1], postID20 = posts[20][2], post21 = posts[21][0], postby21 = posts[21][1], postID21 = posts[21][2], post22 = posts[22][0], postby22 = posts[22][1], postID22 = posts[22][2], post23 = posts[23][0], postby23 = posts[23][1], postID23 = posts[23][2], post24 = posts[24][0], postby24 = posts[24][1], postID24 = posts[24][2], post25 = posts[25][0], postby25 = posts[25][1], postID25 = posts[25][2], post26 = posts[26][0], postby26 = posts[26][1], postID26 = posts[26][2], post27 = posts[27][0], postby27 = posts[27][1], postID27 = posts[27][2], post28 = posts[28][0], postby28 = posts[28][1], postID28 = posts[28][2], post29 = posts[29][0], postby29 = posts[29][1], postID29 = posts[29][2], post30 = posts[30][0], postby30 = posts[30][1], postID30 = posts[30][2])
             # return render_template('feed.html', username = username, posts0 = "sanjiv", postby0 = "sanjiv", posts1 = "", postby1 = "")
         else:
             return redirect('./login')
@@ -138,18 +138,34 @@ def search_result():
                     if search_content_element == name_element:
                         search_result.append(i)
         final = []
-        if branch != 'None':
+        if branch != 'None' and section != "None" and hostel != 'None':
             for i in search_result:
-                if i['branch'] == branch:
+                if i['branch'] == branch and i['section'] == section and i["hostel"] == hostel and i not in final:
                     final.append(i)
-        if section != 'None':
+        if branch != 'None' and section != "None" and hostel == 'None':
             for i in search_result:
-                if i['section'] == section:
+                if i['branch'] == branch and i['section'] == section and i not in final:
                     final.append(i)
-        if hostel != 'None':
+        if branch != 'None' and section == "None" and hostel != 'None':
             for i in search_result:
-                if i['hostel'] == hostel:
+                if i['branch'] == branch and i["hostel"] == hostel and i not in final:
                     final.append(i)
+        if branch == 'None' and section != "None" and hostel != 'None':
+            for i in search_result:
+                if i['section'] == section and i["hostel"] == hostel and i not in final:
+                    final.append(i)
+        if branch != 'None' and section == "None" and hostel == 'None':
+            for i in search_result:
+                if i['branch'] == branch and i not in final:
+                    final.append(i)
+        if branch == 'None' and section != "None" and hostel == 'None':
+            for i in search_result:
+                if i['section'] == section and i not in final:
+                    final.append(i)
+        if branch == 'None' and section == "None" and hostel != 'None':
+            for i in search_result:
+                if i["hostel"] == hostel and i not in final:
+                    final.append(i)   
         if branch == 'None' and section == 'None' and hostel == 'None':
             final = list(search_result)
         print(final)
@@ -162,9 +178,9 @@ def search_result():
         pickle.dump(search_content, f)
         f.close()
         res = make_response(redirect('/search_result'))
-        res.set_cookie("branch", "None")
-        res.set_cookie("section", "None")
-        res.set_cookie("hostel", "None")
+        res.set_cookie("branch", request.form.get('branch'))
+        res.set_cookie("section", request.form.get('section'))
+        res.set_cookie("hostel", request.form.get('hostel'))
         return res
 
 
